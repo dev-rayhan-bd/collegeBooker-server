@@ -100,6 +100,24 @@ app.get("/allAppliedColleges", async (req, res) => {
     );
     res.send(result);
   });
+     // update profile
+     app.patch("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateProfile = req.body;
+      console.log(updateProfile);
+      const filter = { _id: new ObjectId(id) };
+      const option = { upsert: true };
+
+      const updateDoc = {
+        $set: {
+          name: updateProfile.name,
+          email: updateProfile.email,
+          address: updateProfile.address,
+        },
+      };
+      const result = await applyCollection.updateOne(filter, updateDoc, option);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
